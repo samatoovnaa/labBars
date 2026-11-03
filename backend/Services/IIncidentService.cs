@@ -1,5 +1,4 @@
 using backend.Dtos;
-using backend.Models;
 
 namespace backend.Services;
 
@@ -9,5 +8,7 @@ public interface IIncidentService
     IEnumerable<IncidentResponse> GetAll();
     IncidentResponse? GetById(int id);
     IncidentResponse? Assign(int id, AssignRequest request);
-    IncidentResponse? ChangeStatus(int id, StatusRequest request);
+    
+    // Вот здесь обязательно должно быть 4 параметра!
+    IncidentResponse? ChangeStatus(int id, StatusRequest request, int userId, string? role);
 }

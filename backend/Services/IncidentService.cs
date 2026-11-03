@@ -2,6 +2,7 @@ using backend.Data;
 using backend.Dtos;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace backend.Services;
 
@@ -23,12 +24,12 @@ public class IncidentService : IIncidentService
             Description = request.Description,
             CategoryId = request.CategoryId,
             Status = "New",
-            CreatedByUserId = 1, // Пока ставим первого юзера (для теста)
+            CreatedByUserId = 1, // Пока оставляем первого юзера для теста
             AssigneeUserId = null
         };
         
         _context.Incidents.Add(incident);
-        _context.SaveChanges(); // СОХРАНЯЕМ В БАЗУ!
+        _context.SaveChanges();
         
         return MapToResponse(incident);
     }
@@ -50,14 +51,20 @@ public class IncidentService : IIncidentService
         if (incident == null) return null;
 
         incident.AssigneeUserId = request.AssigneeUserId;
-        _context.SaveChanges(); // СОХРАНЯЕМ В БАЗУ!
+        _context.SaveChanges();
         return MapToResponse(incident);
     }
 
-    public IncidentResponse? ChangeStatus(int id, StatusRequest request)
+    public IncidentResponse? ChangeStatus(int id, StatusRequest request, int userId, string? role)
     {
         var incident = _context.Incidents.FirstOrDefault(i => i.Id == id);
         if (incident == null) return null;
+
+        // Проверка прав: Диспетчер может всё, Инженер - только свои
+        if (role != "Dispatcher" && incident.AssigneeUserId != userId)
+        {
+            throw new UnauthorizedAccessException("Вы не можете менять чужой инцидент");
+        }
 
         if (request.Status == "InProgress" && incident.AssigneeUserId == null)
             throw new InvalidOperationException("Нельзя перевести в работу без исполнителя.");
@@ -67,7 +74,7 @@ public class IncidentService : IIncidentService
             throw new ArgumentException("Недопустимый статус.");
 
         incident.Status = request.Status;
-        _context.SaveChanges(); // СОХРАНЯЕМ В БАЗУ!
+        _context.SaveChanges();
         return MapToResponse(incident);
     }
 

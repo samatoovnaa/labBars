@@ -40,3 +40,15 @@ Swagger: http://localhost:5000/swagger
 
 Пароль от PostgreSQL тот, что задавали при установке, в репозиторий не кладем. 
 Для запуска: создайте БД `course_incidents` в pgAdmin и выполните скрипты по очереди через Query Tool.
+
+cd ..
+git add .
+git commit -m "ЛР10: EF Core, миграции, подключение к PostgreSQL"
+git push
+
+## ЛР11 - Авторизация и безопасность
+Добавлена JWT-авторизация. Пароли хешируются. 
+Добавлена матрица ролей в `docs/role-matrix.md`.
+Учетные данные для теста:
+- Логин: dispatcher, Пароль: Password!
+- Логин: engineer, Пароль: Password!

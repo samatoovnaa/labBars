@@ -9,6 +9,7 @@ public class AppDbContext : DbContext
 
     public DbSet<Incident> Incidents { get; set; }
 
+    public DbSet<Employee> Employees { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Настраиваем связь C#-модели с таблицей из ЛР9
