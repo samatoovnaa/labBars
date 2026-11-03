@@ -14,6 +14,7 @@ defineProps({
       <tr>
         <th>Номер</th>
         <th>Краткое описание</th>
+        <th>Полное описание</th> <!-- НОВАЯ КОЛОНКА -->
         <th>Подразделение (siteId)</th>
         <th>Категория</th>
         <th>Уровень риска</th>
@@ -24,6 +25,7 @@ defineProps({
       <tr v-for="item in items" :key="item.id">
         <td>{{ item.number }}</td>
         <td>{{ item.title }}</td>
+        <td>{{ item.description }}</td> <!-- БЕЗОПАСНЫЙ ВЫВОД -->
         <td>{{ item.siteId }}</td>
         <td>{{ item.category }}</td>
         <td>{{ item.riskLevel }}</td>

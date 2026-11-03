@@ -1,87 +1,44 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { getTickets } from '../api/tickets.js'
+import { ref } from 'vue'
 import IncidentTable from '../components/IncidentTable.vue'
 
-// Одно поле состояния — четыре возможных значения
-// 'loading' | 'empty' | 'data' | 'error'
-const screen = ref('loading')
-
-// Массив инцидентов (заполняется после ответа)
-const items = ref([])
-
-// Текст ошибки (если screen === 'error')
-const errorMessage = ref('')
-
-async function loadIncidents() {
-  screen.value = 'loading'
-  errorMessage.value = ''
-
-  try {
-    const data = await getTickets()
-    items.value = data
-
-    if (data.length === 0) {
-      screen.value = 'empty'
-    } else {
-      screen.value = 'data'
-    }
-  } catch (err) {
-    screen.value = 'error'
-    // Разные тексты для разных типов ошибок
-    if (err.status === 400) {
-      errorMessage.value = 'Проверьте поля — сервер отклонил запрос.'
-    } else if (err.status === 500) {
-      errorMessage.value = 'Сервер не смог обработать запрос.'
-    } else if (err.status) {
-      errorMessage.value = `Ошибка ${err.status}: ${err.message}`
-    } else {
-      // Нет статуса — это сетевая ошибка (fetch упал)
-      errorMessage.value = 'Нет связи. Проверьте, что приложение запущено.'
-    }
+// Временный массив с данными (пока без подключения к бэкенду)
+const items = ref([
+  {
+    id: 1,
+    number: 'INC-001',
+    title: 'Обычный инцидент',
+    description: 'Всё работает штатно, это обычный текст.',
+    siteId: 1,
+    category: 'Сбой оборудования',
+    riskLevel: 'Низкий',
+    status: 'New'
+  },
+  {
+    id: 999,
+    number: 'XSS-TEST',
+    title: 'Проверка безопасности',
+    // ВОТ НАШ ОПАСНЫЙ СКРИПТ (разбит на части, чтобы не ломать код):
+    description: "<scr" + "ipt>alert('Взлом!')</scr" + "ipt>", 
+    siteId: 1,
+    category: 'Тест',
+    riskLevel: 'Высокий',
+    status: 'New'
   }
-}
-
-// Загружаем при открытии страницы
-onMounted(loadIncidents)
+])
 </script>
 
 <template>
-  <main>
-    <h2>Реестр инцидентов ИБ</h2>
-
-    <!-- ===== Загрузка ===== -->
-    <div v-if="screen === 'loading'">
-      <p>Загрузка…</p>
-    </div>
-
-    <!-- ===== Пусто ===== -->
-    <div v-else-if="screen === 'empty'">
-      <p>Записей пока нет.</p>
-    </div>
-
-    <!-- ===== Данные ===== -->
-    <div v-else-if="screen === 'data'">
-      <IncidentTable :items="items" />
-    </div>
-
-    <!-- ===== Ошибка ===== -->
-    <div v-else>
-      <p class="error">{{ errorMessage }}</p>
-      <button type="button" @click="loadIncidents">Повторить</button>
-    </div>
-  </main>
+  <div>
+    <h2>Список инцидентов</h2>
+    <!-- Передаем наши данные в таблицу -->
+    <IncidentTable :items="items" />
+  </div>
 </template>
 
 <style scoped>
-  .error {
-    color: #c00;
-    padding: 1rem;
-    background: #fee;
-    border: 1px solid #c00;
-  }
-  button {
-    padding: 0.4rem 1rem;
-    cursor: pointer;
-  }
+h2 {
+  color: #333;
+  margin-bottom: 1rem;
+}
 </style>
