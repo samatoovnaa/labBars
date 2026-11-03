@@ -1,3 +1,5 @@
+using backend.Data;
+using Microsoft.EntityFrameworkCore;
 using backend.Services;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +10,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<IIncidentService, IncidentService>(); 
+//builder.Services.AddScoped<IIncidentService, IncidentService>(); 
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
+builder.Services.AddScoped<IIncidentService, IncidentService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

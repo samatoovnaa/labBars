@@ -8,5 +8,9 @@ public class Incident
     public string Description { get; set; } = string.Empty;
     public string Status { get; set; } = "New";
     public int CategoryId { get; set; }
-    public int? AssigneeUserId { get; set; } // Может быть пустым
+    
+    // ВОТ ЭТУ СТРОКУ НУЖНО ДОБАВИТЬ:
+    public int CreatedByUserId { get; set; } 
+    
+    public int? AssigneeUserId { get; set; } 
 }
