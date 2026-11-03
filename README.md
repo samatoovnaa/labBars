@@ -11,3 +11,14 @@
 - [Матрица требований](docs/requirements-matrix.md)
 - [ТЗ](docs/project-proposal.md)
 - [Требования ЛР1](docs/lab-01-requirements.md)
+
+## Запуск бэкенда (ЛР7)
+
+```bash
+cd backend
+dotnet restore
+dotnet run
+
+API: http://localhost:5000
+
+Swagger: http://localhost:5000/swagger
