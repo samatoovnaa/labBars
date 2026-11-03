@@ -22,3 +22,11 @@ dotnet run
 API: http://localhost:5000
 
 Swagger: http://localhost:5000/swagger
+
+
+## ЛР8 - REST API
+
+- Базовый URL: http://localhost:5000
+- Swagger: http://localhost:5000/swagger
+- Данные хранятся в памяти, после перезапуска пропадают.
+- Коллекция запросов для Postman лежит в `docs/api-collection/incidents.postman_collection.json`.

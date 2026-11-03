@@ -1,0 +1,45 @@
+{
+	"info": {
+		"name": "Incidents API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Create Incident (201)",
+			"request": {
+				"method": "POST",
+				"header": [{"key": "Content-Type", "value": "application/json"}],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"Утечка данных клиентов\",\n  \"description\": \"Обнаружена утечка через API\",\n  \"categoryId\": 2\n}"
+				},
+				"url": {"raw": "http://localhost:5000/api/incidents", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "incidents"]}
+			}
+		},
+		{
+			"name": "2. Bad Request (400)",
+			"request": {
+				"method": "POST",
+				"header": [{"key": "Content-Type", "value": "application/json"}],
+				"body": {"mode": "raw", "raw": "{\n  \"title\": \"Ой\",\n  \"description\": \"Коротко\",\n  \"categoryId\": 2\n}"},
+				"url": {"raw": "http://localhost:5000/api/incidents", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "incidents"]}
+			}
+		},
+		{
+			"name": "3. Not Found (404)",
+			"request": {
+				"method": "GET",
+				"url": {"raw": "http://localhost:5000/api/incidents/9999", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "incidents", "9999"]}
+			}
+		},
+		{
+			"name": "4. Conflict - No Assignee (409)",
+			"request": {
+				"method": "PATCH",
+				"header": [{"key": "Content-Type", "value": "application/json"}],
+				"body": {"mode": "raw", "raw": "{\n  \"status\": \"InProgress\"\n}"},
+				"url": {"raw": "http://localhost:5000/api/incidents/1/status", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "incidents", "1", "status"]}
+			}
+		}
+	]
+}
