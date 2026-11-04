@@ -68,3 +68,19 @@ git push
    cd backend
    dotnet user-secrets init
    dotnet user-secrets set "ConnectionStrings:Default" "Host=localhost;Port=5432;Database=course_incidents;Username=postgres;Password=ВАШ_ПАРОЛЬ"
+
+   # Система управления инцидентами
+
+## Запуск
+1. Настроить PostgreSQL и выполнить `dotnet ef database update` в папке `backend`.
+2. Запустить бэкенд: `cd backend && dotnet run`
+3. Запустить фронтенд: `cd frontend && npm install && npm run dev`
+
+## Тестовые аккаунты
+- Диспетчер: `dispatcher` / `Password!`
+- Инженер: `engineer` / `Password!`
+
+## Демо-сценарий
+1. Открыть `http://localhost:5173`
+2. Нажать "Создать инцидент". Увидеть код 201 в Network и строку в pgAdmin.
+3. Назначить исполнителя и сменить статус через Swagger.
