@@ -63,6 +63,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowVue", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173") // Разрешаем именно твой Vue
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -77,6 +87,8 @@ app.UseHttpsRedirection();
 // 6. ОЧЕНЬ ВАЖНО: Подключаем аутентификацию и авторизацию (строго в таком порядке!)
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseCors("AllowVue");
 
 app.MapControllers();
 

@@ -52,3 +52,19 @@ git push
 Учетные данные для теста:
 - Логин: dispatcher, Пароль: Password!
 - Логин: engineer, Пароль: Password!
+
+# Система управления рисками и инцидентами
+
+## Стек
+- Frontend: Vue 3 + Vite (порт 5173)
+- Backend: ASP.NET Core (порт 5000)
+- База данных: PostgreSQL (порт 5432)
+
+## Как запустить (пошагово)
+
+1. Установите PostgreSQL и создайте пустую базу данных `course_incidents`.
+2. В папке `backend` настройте пароль к базе (замените `ВАШ_ПАРОЛЬ`):
+   ```bash
+   cd backend
+   dotnet user-secrets init
+   dotnet user-secrets set "ConnectionStrings:Default" "Host=localhost;Port=5432;Database=course_incidents;Username=postgres;Password=ВАШ_ПАРОЛЬ"
