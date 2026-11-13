@@ -1,0 +1,7 @@
+# Use this workspace to collaborate
+workspace:
+  id: d3ed2751-f7ba-4215-85da-5808b913c129
+
+localResources:
+  collections:
+    - ../docs/api-collection/Incidents API

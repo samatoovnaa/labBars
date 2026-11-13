@@ -1,0 +1,14 @@
+$kind: http-request
+url: http://localhost:5000/api/incidents
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "title": "Утечка данных клиентов",
+      "description": "Обнаружена утечка через API",
+      "categoryId": 2
+    }
+order: 1000

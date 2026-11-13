@@ -8,11 +8,20 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Добавляем контроллеры
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// 2. Настраиваем Swagger, чтобы в нем появилась кнопка "Authorize" (для токенов)
+// НАСТРОЙКА CORS (Разрешаем Vue забирать данные)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowVue", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173") // Адрес твоего Vue
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -22,32 +31,25 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Вставьте сюда ваш JWT токен (без слова Bearer)."
+        Description = "Вставьте сюда ваш JWT токен."
     });
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
             new OpenApiSecurityScheme
             {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
             },
             new string[] {}
         }
     });
 });
 
-// 3. Подключение к базе данных PostgreSQL (EF Core)
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
-// 4. Регистрация твоего сервиса
 builder.Services.AddScoped<IIncidentService, IncidentService>();
 
-// 5. Настройка JWT (ЛР11)
 builder.Configuration["Jwt:Key"] = "super_secret_key_1234567890_super_secret!";
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -63,19 +65,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 builder.Services.AddAuthorization();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowVue", policy =>
-    {
-        policy.WithOrigins("http://localhost:5173") // Разрешаем именно твой Vue
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
-});
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -84,21 +75,15 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// 6. ОЧЕНЬ ВАЖНО: Подключаем аутентификацию и авторизацию (строго в таком порядке!)
+// ПОДКЛЮЧАЕМ CORS (строго до Authentication)
+app.UseCors("AllowVue");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors("AllowVue");
-
 app.MapControllers();
 
-// 7. Твои служебные эндпоинты из ЛР7
 app.MapGet("/health", () => Results.Ok("Healthy"));
-app.MapGet("/info", () => Results.Ok(new
-{
-    App = "Risk & Incident Management API",
-    Environment = app.Environment.EnvironmentName,
-    Lab = "ЛР7 — каркас Web API"
-}));
+app.MapGet("/info", () => Results.Ok(new { App = "Incident API", Environment = app.Environment.EnvironmentName }));
 
 app.Run();

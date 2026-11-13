@@ -7,10 +7,14 @@ public class Incident
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string Status { get; set; } = "New";
+    
+    // Внешние ключи (FK)
     public int CategoryId { get; set; }
-    
-    // ВОТ ЭТУ СТРОКУ НУЖНО ДОБАВИТЬ:
-    public int CreatedByUserId { get; set; } 
-    
-    public int? AssigneeUserId { get; set; } 
+    public int CreatedByUserId { get; set; }
+    public int? AssigneeUserId { get; set; }
+
+    // Навигационные свойства (связи)
+    public Category? Category { get; set; }
+    public Employee? CreatedBy { get; set; }
+    public Employee? Assignee { get; set; }
 }
