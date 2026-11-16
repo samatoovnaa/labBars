@@ -7,22 +7,22 @@
 
 ### Шаг 1. Создание инцидента (POST)
 Сервер вернул код 201 Created. Был присвоен ID = 5.
-![Создание инцидента](image-lab10-post.png)
-*(Замени картинку на свою)*
+![alt text](<POST создание.png>)
+
 
 ### Шаг 2. Перезапуск сервера
 Сервер был остановлен (Ctrl+C) и запущен заново (dotnet run).
 
 ### Шаг 3. Запрос того же инцидента (GET)
 После перезапуска сервер вернул тот же самый инцидент с ID = 5 (код 200 OK).
-![Запрос после рестарта](image-lab10-get.png)
-*(Замени картинку на свою)*
+![alt text](<GET по тому же ID.png>)
+
 
 ### Шаг 4. Проверка в pgAdmin
 В таблице базы данных сохранена эта же запись.
-![Строка в базе данных](image-lab10-db.png)
-*(Замени картинку на свою)*
+![alt text](<pgAdmin, где в таблице incidents.png>)
+
 
 ## 3. Пара LINQ / SQL
 - **C# (LINQ):** `_context.Incidents.FirstOrDefault(i => i.Id == id)`
-- **SQL (тот же смысл):** `SELECT * FROM incidents WHERE id = id LIMIT 1;`
+- **SQL :** `SELECT * FROM incidents WHERE id = id LIMIT 1;`
